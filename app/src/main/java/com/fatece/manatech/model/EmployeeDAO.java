@@ -45,8 +45,8 @@ public class EmployeeDAO {
 
         if (cursor.moveToFirst()) {
             Employee employee = new Employee(cursor.getString(1),cursor.getString(2),
-                    cursor.getString(3), username ,cursor.getString(4),
-                    cursor.getString(5),cursor.getInt(6));
+                    cursor.getString(3), username ,cursor.getString(5),
+                    cursor.getString(6),cursor.getInt(7));
             return employee;
         }
         return null;

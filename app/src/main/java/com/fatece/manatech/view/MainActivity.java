@@ -16,12 +16,23 @@ import com.fatece.manatech.model.db.DBHelper;
 
 import java.util.Date;
 
+
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent i = getIntent();
+        String username = i.getStringExtra("username");
+
+        EmployeeDAO dao = new EmployeeDAO(this);
+
+        Employee employee = dao.findEmployee(username);
+
+        Toast.makeText(this,"Email: " + employee.getEmail(), Toast.LENGTH_LONG).show();
 
     }
 

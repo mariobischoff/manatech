@@ -17,13 +17,11 @@ public class LoginActivity extends AppCompatActivity {
 
 
     EditText editUsername, editPassword;
-    Button btnLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
 
         editUsername = (EditText) findViewById(R.id.editUsername);
         editPassword = (EditText) findViewById(R.id.editPassword);
@@ -32,20 +30,18 @@ public class LoginActivity extends AppCompatActivity {
     public void clickLogin(View v) {
 
         EmployeeDAO dao = new EmployeeDAO(this);
-
         Employee employee = dao.findEmployee(editUsername.getText().toString());
 
-        Toast.makeText(this, "User: "+employee.getFirstName(), Toast.LENGTH_LONG).show();
-
         if(employee != null) {
-            if (editPassword.getText().toString() == employee.getPassword()) {
+            if(editPassword.getText().toString().equals(employee.getPassword())) {
                 Intent intent = new Intent(this, MainActivity.class);
-                intent.putExtra("employee", employee);
-                Toast.makeText(this,"username and password macth", Toast.LENGTH_LONG).show();
+                intent.putExtra("username", employee.getUsername());
                 startActivity(intent);
+            } else {
+                Toast.makeText(this,"Invalid password", Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast.makeText(this,"Invalid username or password", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Invalid username", Toast.LENGTH_LONG).show();
         }
     }
 
