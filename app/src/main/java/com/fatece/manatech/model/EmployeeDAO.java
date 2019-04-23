@@ -7,8 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.fatece.manatech.model.db.DBHelper;
 
-import java.io.Console;
-
 public class EmployeeDAO {
 
     private DBHelper con;
@@ -35,9 +33,9 @@ public class EmployeeDAO {
     }
 
     public Employee findEmployee(String username) {
-
         String selectQuery = "SELECT (`id`, `f_name`, `l_name`, `email`, `password`, `function`, `id_time`) " +
                 "FROM `employee` WHERE `username` = ?";
+
         String[] columns = {"id", "f_name", "l_name", "email", "username", "password", "function", "id_time"};
 
         Cursor cursor = db.query("employee", columns, "username = ?", new String[] {username},
@@ -50,5 +48,17 @@ public class EmployeeDAO {
             return employee;
         }
         return null;
+    }
+
+    public long saveEmployee(Employee employee) {
+        ContentValues values = new ContentValues();
+        values.put("f_name", employee.getFirstName());
+        values.put("l_name", employee.getLastName());
+        values.put("email", employee.getEmail());
+        values.put("username", employee.getUsername());
+        values.put("password", employee.getPassword());
+        values.put("function", employee.getFunction());
+        values.put("id_time", employee.getId_time());
+        return db.insert("employee", null, values);
     }
 }

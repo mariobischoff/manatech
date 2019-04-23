@@ -18,7 +18,8 @@
             android:id="@+id/imgPhoto"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginRight="20dp"/>
+            android:layout_marginRight="20dp"
+            android:src="@drawable/mana01"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,19 +34,34 @@
                 <TextView
                     android:id="@+id/txtFirtName"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:text="Mário"
+                    style="@style/TextAppearance.AppCompat.Medium"/>
 
                 <TextView
                     android:id="@+id/txtLastName"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:text="Bischoff"
+                    style="@style/TextAppearance.AppCompat.Medium"/>
 
             </LinearLayout>
 
             <TextView
+                android:id="@+id/txtFunction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Developer"
+                style="@style/TextAppearance.AppCompat.Button"/>
+
+
+            <TextView
                 android:id="@+id/txtTeam"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:text="team: Mummy"
+                style="@style/TextAppearance.AppCompat.Display1"/>
 
         </LinearLayout>
 
@@ -53,6 +69,23 @@
 
 
 
+
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/txtMeet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Meetings"
+        android:textAlignment="center"
+        style="@style/TextAppearance.AppCompat.Headline"/>
+
+    <ListView
+        android:id="@+id/listMeet"
+        android:layout_width="wrap_content"
+        android:layout_height="188dp">
+
+    </ListView>
 
 </LinearLayout>
