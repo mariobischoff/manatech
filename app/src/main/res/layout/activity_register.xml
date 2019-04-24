@@ -127,6 +127,12 @@
 
     </android.support.design.widget.TextInputLayout>
 
+    <Spinner
+        android:id="@+id/spinnerTeam"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </Spinner>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -144,21 +150,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Manager" />
+            android:text="Manager"
+            android:onClick="onRadioButtonClicked"/>
 
         <RadioButton
             android:id="@+id/radioDev"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Dev" />
+            android:text="Dev"
+            android:onClick="onRadioButtonClicked"/>
 
         <RadioButton
             android:id="@+id/radioHr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="H.R." />
+            android:text="H.R."
+            android:onClick="onRadioButtonClicked"/>
 
 
         <RadioButton
@@ -166,7 +175,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Intern" />
+            android:text="Intern"
+            android:onClick="onRadioButtonClicked"/>
 
     </RadioGroup>
 
@@ -195,10 +205,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:background="@drawable/button_rounded"
-            android:text="Register" />
+            android:text="Register"
+            android:onClick="register"/>
 
     </LinearLayout>
-
 
 
 </LinearLayout>
