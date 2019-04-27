@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.RegisterActivity"
     android:orientation="vertical"
-    android:padding="30dp">
+    android:padding="10dp">
 
 
 
@@ -127,6 +127,15 @@
 
     </android.support.design.widget.TextInputLayout>
 
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Team"
+        android:textAlignment="center"
+        style="@style/TextAppearance.AppCompat.Medium"/>
+
     <Spinner
         android:id="@+id/spinnerTeam"
         android:layout_width="match_parent"
@@ -136,6 +145,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:text="Function"
         android:textAlignment="center"
         style="@style/TextAppearance.AppCompat.Medium"/>

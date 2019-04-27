@@ -25,4 +25,10 @@ public class Time {
     public void setNameTime(String nameTime) {
         this.nameTime = nameTime;
     }
+
+
+    @Override
+    public String toString() {
+        return this.nameTime;
+    }
 }
