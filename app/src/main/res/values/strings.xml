@@ -3,6 +3,11 @@
     <string name="title_activity_login">Sign in</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
+    <string name="teste_meeting_ata">
+
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam tortor quam, facilisis eget libero at, congue molestie justo. Nulla vulputate sodales risus, ut porttitor ex varius vitae. Etiam in felis augue. Mauris hendrerit porta sollicitudin. Duis vestibulum neque id tortor ornare, et consequat nibh accumsan. Nam sit amet viverra nisi. Maecenas egestas pharetra tortor, non placerat felis tempor ut.
+    Donec vel urna sit amet massa sollicitudin convallis. Ut scelerisque ante vitae erat fringilla, sit amet aliquam velit dictum. Duis molestie velit sed diam fringilla, id consectetur nunc luctus. Donec efficitur eu risus sed viverra. Donec feugiat elit nec luctus vulputate. Cras sed sem massa. Integer sit amet hendrerit ligula. Suspendisse a dolor eu nibh congue dapibus. Curabitur nisi justo, vulputate ac ante non, tempus maximus libero.</string>
     <string name="prompt_password">Password (optional)</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
