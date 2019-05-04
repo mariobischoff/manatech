@@ -44,4 +44,19 @@ public class MeetingDAO {
         return null;
     }
 
+    public List<Meeting> findByTeam(Integer id) {
+        List<Meeting> meetings = new ArrayList<>();
+        String[] columns = {"id", "date", "ata", "id_time"};
+        Cursor cursor = db.query(tableName,columns,"id_time = ?",
+                new String[] {id.toString()},null,null,null);
+        if (cursor.moveToFirst()) {
+            do {
+                Meeting meet = new Meeting(cursor.getString(1), cursor.getString(2), cursor.getInt(3));
+                meetings.add(meet);
+            } while (cursor.moveToNext());
+            return meetings;
+        }
+        return null;
+    }
+
 }

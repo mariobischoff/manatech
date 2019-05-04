@@ -39,10 +39,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         List<Meeting> meetings = new MeetingDAO(this).findAll();
         List<Activity> activities = new ActivityDAO(this).findAll();
 
-        ArrayAdapter<Meeting> adapterMeet = new ArrayAdapter<Meeting>(this,
+        ArrayAdapter<Meeting> adapterMeet = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, meetings);
 
+        ArrayAdapter<Activity> adapterAct = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, activities);
+
         listMeet.setAdapter(adapterMeet);
+        listAct.setAdapter(adapterAct);
 
 
         Toast.makeText(this, "activities " + activities.get(0).getDeadline(), Toast.LENGTH_SHORT).show();

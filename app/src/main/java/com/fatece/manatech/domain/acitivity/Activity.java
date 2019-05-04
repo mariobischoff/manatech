@@ -60,4 +60,9 @@ public class Activity {
         this.done = done;
     }
 
+    @Override
+    public String toString() {
+        String data = this.deadline.substring(0, 11);
+        return "Deadline: " + data;
+    }
 }
