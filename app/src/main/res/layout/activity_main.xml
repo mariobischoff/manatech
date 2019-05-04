@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.MainActivity"
     android:orientation="vertical"
-    android:padding="30dp">
+    android:padding="10dp">
 
     <LinearLayout
+        android:id="@+id/linearTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="30dp">
 
         <ImageView
             android:id="@+id/imgPhoto"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginRight="20dp"
-            android:src="@drawable/mana01"/>
+            android:src="@drawable/mana01" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,59 +36,137 @@
 
                 <TextView
                     android:id="@+id/txtFirtName"
+                    style="@style/TextAppearance.AppCompat.Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="8dp"
-                    android:text="Mário"
-                    style="@style/TextAppearance.AppCompat.Medium"/>
+                    android:text="Mário" />
 
                 <TextView
                     android:id="@+id/txtLastName"
+                    style="@style/TextAppearance.AppCompat.Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Bischoff"
-                    style="@style/TextAppearance.AppCompat.Medium"/>
+                    android:text="Bischoff" />
 
             </LinearLayout>
 
             <TextView
                 android:id="@+id/txtFunction"
+                style="@style/TextAppearance.AppCompat.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Developer"
-                style="@style/TextAppearance.AppCompat.Button"/>
-
+                android:text="Developer" />
 
             <TextView
                 android:id="@+id/txtTeam"
+                style="@style/TextAppearance.AppCompat.Display1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="team: Mummy"
-                style="@style/TextAppearance.AppCompat.Display1"/>
+                android:text="team: Mummy" />
 
         </LinearLayout>
 
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/linearTitle">
 
+        <TextView
+            android:id="@+id/txtMeet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Meetings"
+            android:textAlignment="center"
+            style="@style/TextAppearance.AppCompat.Headline"/>
 
+        <ListView
+            android:id="@+id/listMeet"
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtMeet">
 
+        </ListView>
+
+        <TextView
+            android:id="@+id/txtAct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Activities"
+            android:textAlignment="center"
+            style="@style/TextAppearance.AppCompat.Headline"/>
+
+        <ListView
+            android:id="@+id/listAct"
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtMeet">
+
+        </ListView>
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/txtMeet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Meetings"
-        android:textAlignment="center"
-        style="@style/TextAppearance.AppCompat.Headline"/>
 
-    <ListView
-        android:id="@+id/listMeet"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="188dp">
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-    </ListView>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabAddAct"
+            android:layout_width="381dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:src="@drawable/ic_note_add_black_24dp"
+            android:tint="@android:color/white"
+            app:fabSize="mini"/>
 
-</LinearLayout>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabAddMeet"
+            android:layout_width="381dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:src="@drawable/ic_playlist_add_black_24dp"
+            android:tint="@android:color/white"
+            app:fabSize="mini"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabAddEmployee"
+            android:layout_width="381dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:src="@drawable/ic_person_add_black_24dp"
+            android:tint="@android:color/white"
+            app:fabSize="mini"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:src="@drawable/ic_add_black_24dp"
+            android:tint="@android:color/white"
+            app:fabSize="normal"/>
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

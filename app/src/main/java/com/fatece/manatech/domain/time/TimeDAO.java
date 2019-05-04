@@ -1,11 +1,11 @@
-package com.fatece.manatech.model;
+package com.fatece.manatech.domain.time;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.fatece.manatech.model.db.DBHelper;
+import com.fatece.manatech.util.DBHelper;
 
 import java.util.ArrayList;
 import java.util.List;

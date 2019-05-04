@@ -1,4 +1,4 @@
-package com.fatece.manatech.model;
+package com.fatece.manatech.domain.employee;
 
 import java.io.Serializable;
 
@@ -10,10 +10,10 @@ public class Employee implements Serializable {
     private String email;
     private String username;
     private String password;
-    private String function;
+    private Integer function;
     private Integer id_time;
 
-    public Employee(String firstName, String lastName, String email, String username, String password, String function, Integer id_time) {
+    public Employee(String firstName, String lastName, String email, String username, String password, Integer function, Integer id_time) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -71,11 +71,11 @@ public class Employee implements Serializable {
         this.password = password;
     }
 
-    public String getFunction() {
+    public Integer getFunction() {
         return function;
     }
 
-    public void setFunction(String func) {
+    public void setFunction(Integer func) {
         this.function = func;
     }
 

@@ -1,4 +1,4 @@
-package com.fatece.manatech.model;
+package com.fatece.manatech.domain.time;
 
 public class Time {
 

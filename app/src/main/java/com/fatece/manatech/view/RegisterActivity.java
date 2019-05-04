@@ -13,10 +13,10 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.fatece.manatech.R;
-import com.fatece.manatech.model.Employee;
-import com.fatece.manatech.model.EmployeeDAO;
-import com.fatece.manatech.model.Time;
-import com.fatece.manatech.model.TimeDAO;
+import com.fatece.manatech.domain.employee.Employee;
+import com.fatece.manatech.domain.employee.EmployeeDAO;
+import com.fatece.manatech.domain.time.Time;
+import com.fatece.manatech.domain.time.TimeDAO;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     RadioButton radioManager, radioDeveloper, radioHR, radioIntern;
     Spinner spinnerTeam;
     Button btnRegister, btnBack;
-    String function;
+    Integer function;
     List<Time> times;
     TimeDAO daoTime;
 
@@ -37,46 +37,47 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        // Team and Spinner
+        //Spinner
         daoTime = new TimeDAO(this);
         times = daoTime.findAll();
-        spinnerTeam = (Spinner) findViewById(R.id.spinnerTeam);
-        ArrayAdapter<Time> adapter = new ArrayAdapter<Time>(this, R.layout.spinner_layout,R.id.txtTeam,times);
+        spinnerTeam = findViewById(R.id.spinnerTeam);
+        spinnerTeam.setOnItemSelectedListener(this);
+        ArrayAdapter<Time> adapter = new ArrayAdapter<Time>(this,
+                R.layout.spinner_layout, R.id.txtTeam,times);
         spinnerTeam.setAdapter(adapter);
 
-
-        editFistName = (EditText) findViewById(R.id.editFirstName);
-        editLastName = (EditText) findViewById(R.id.editLastName);
-        editEmail = (EditText) findViewById(R.id.editEmail);
-        editUsername = (EditText) findViewById(R.id.editUsername);
-        editPassword = (EditText) findViewById(R.id.editPassword);
-        editConfirmPw = (EditText) findViewById(R.id.editConfirmPass);
-
+        editFistName = findViewById(R.id.editFirstName);
+        editLastName = findViewById(R.id.editLastName);
+        editEmail = findViewById(R.id.editEmail);
+        editUsername = findViewById(R.id.editUsername);
+        editPassword = findViewById(R.id.editPassword);
+        editConfirmPw = findViewById(R.id.editConfirmPass);
 
     }
-
+    //set function
     public void onRadioButtonClicked(View view) {
         boolean checked = ((RadioButton) view).isChecked();
         switch (view.getId()) {
             case R.id.radioManager:
                 if (checked)
-                    function = "manager";
+                    function = 1;
                 break;
             case R.id.radioDev:
                 if (checked)
-                    function = "dev";
+                    function = 2;
                 break;
             case R.id.radioHr:
                 if (checked)
-                    function = "hr";
+                    function = 3;
                 break;
             case R.id.radioIntern:
                 if (checked)
-                    function = "intern";
+                    function = 4;
                 break;
         }
     }
 
+    //Spinner methods
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Time time = (Time) parent.getItemAtPosition(position);
@@ -88,18 +89,37 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         Time time = (Time) parent.getItemAtPosition(0);
         id_time = time.getId();
     }
-
+    //Register method
     public void register(View view) {
         Employee employee = new Employee(editFistName.getText().toString(),
                 editLastName.getText().toString(), editEmail.getText().toString(),
-                editUsername.getText().toString(), editPassword.getText().toString(),function, id_time);
+                editUsername.getText().toString(), editPassword.getText().toString(),
+                function, id_time);
         EmployeeDAO dao = new EmployeeDAO(this);
-
         long id = dao.addEmployee(employee);
-
         Toast.makeText(this, "Employee " + employee.getFirstName() +
-                        "save successfully.",
-                Toast.LENGTH_SHORT).show();
-
+                        "save successfully.", Toast.LENGTH_SHORT).show();
+        clearFields();
     }
+    //Back to MainActivity
+    public void back(View view) {
+        finish();
+    }
+
+    //ClearAllFields
+    public void clearFields() {
+        editFistName.setText("");
+        editLastName.setText("");
+        editEmail.setText("");
+        editUsername.setText("");
+        editPassword.setText("");
+        editConfirmPw.setText("");
+        editFistName.clearFocus();
+        editLastName.clearFocus();
+        editEmail.clearFocus();
+        editUsername.clearFocus();
+        editPassword.clearFocus();
+        editConfirmPw.clearFocus();
+    }
+
 }

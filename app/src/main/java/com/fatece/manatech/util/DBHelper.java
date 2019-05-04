@@ -1,13 +1,13 @@
-package com.fatece.manatech.model.db;
+package com.fatece.manatech.util;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.fatece.manatech.model.Activity;
-import com.fatece.manatech.model.Meeting;
-import com.fatece.manatech.model.Time;
+import com.fatece.manatech.domain.acitivity.Activity;
+import com.fatece.manatech.domain.meeting.Meeting;
+import com.fatece.manatech.domain.time.Time;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -59,33 +59,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public long addMeeting(Meeting meeting) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("date", getDateTime(meeting.getDate()));
-        values.put("ata", meeting.getAta());
-        values.put("id_time", meeting.getTime().getId());
-        return db.insert(MEETING_TABLE_NAME, null, values);
-    }
-
-    public long addActivity(Activity activity) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("deadline", getDateTime(activity.getDeadline()));
-        values.put("cost", activity.getCost());
-        values.put("des", activity.getDes());
-        values.put("id_time", activity.getTime().getId());
-        return db.insert(ACTIVITY_TABLE_NAME, null, values);
-    }
-
-    public long addTime(Time time) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("name_time", time.getNameTime());
-        return db.insert(TIME_TABLE_NAME, null, values);
-    }
-
-    private String getDateTime(Date date) {
+    public String getDateTime(Date date) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return dateFormat.format(date);
     }

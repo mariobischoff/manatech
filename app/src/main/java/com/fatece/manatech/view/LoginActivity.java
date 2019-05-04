@@ -4,13 +4,12 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.fatece.manatech.R;
-import com.fatece.manatech.model.Employee;
-import com.fatece.manatech.model.EmployeeDAO;
+import com.fatece.manatech.domain.employee.Employee;
+import com.fatece.manatech.domain.employee.EmployeeDAO;
 
 
 public class LoginActivity extends AppCompatActivity {
