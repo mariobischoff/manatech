@@ -27,6 +27,16 @@ public class TimeDAO {
         return db.insert(tableName, null, values);
     }
 
+    public Time find(Integer id) {
+        String[] columns = {"name_time"};
+        Cursor cursor = db.query(tableName, columns, "id = ?", new String[] {id.toString()},
+                null,null,null);
+        if (cursor.moveToFirst()) {
+            return new Time(cursor.getString(0));
+        }
+        return null;
+    }
+
     public List<Time> findAll() {
         List<Time> times = new ArrayList<>();
         String[] columuns = {"id", "name_time"};

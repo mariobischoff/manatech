@@ -32,14 +32,9 @@ public class EmployeeDAO {
     }
 
     public Employee findEmployee(String username) {
-        String selectQuery = "SELECT (`id`, `f_name`, `l_name`, `email`, `password`, `function`, `id_time`) " +
-                "FROM `employee` WHERE `username` = ?";
-
         String[] columns = {"id", "f_name", "l_name", "email", "username", "password", "function", "id_time"};
-
         Cursor cursor = db.query("employee", columns, "username = ?", new String[] {username},
                 null, null, null);
-
         if (cursor.moveToFirst()) {
             Employee employee = new Employee(cursor.getString(1),cursor.getString(2),
                     cursor.getString(3), username ,cursor.getString(5),

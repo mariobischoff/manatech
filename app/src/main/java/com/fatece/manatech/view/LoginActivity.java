@@ -33,9 +33,10 @@ public class LoginActivity extends AppCompatActivity {
 
         if(employee != null) {
             if(editPassword.getText().toString().equals(employee.getPassword())) {
-                Intent intent = new Intent(this, MainActivity.class);
-                intent.putExtra("username", employee.getUsername());
-                startActivity(intent);
+                Intent returnIntent = new Intent(this, MainActivity.class);
+                returnIntent.putExtra("username", editUsername.getText().toString());
+                setResult(RESULT_OK, returnIntent);
+                finish();
             } else {
                 Toast.makeText(this,"Invalid password", Toast.LENGTH_LONG).show();
             }
