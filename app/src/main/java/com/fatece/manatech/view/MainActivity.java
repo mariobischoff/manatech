@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -48,8 +49,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listMeet = findViewById(R.id.listMeet);
         listAct = findViewById(R.id.listAct);
 
-        List<Meeting> meetings = new MeetingDAO(this).findAll();
-        List<Activity> activities = new ActivityDAO(this).findAll();
+        final List<Meeting> meetings = new MeetingDAO(this).findAll();
+        final List<Activity> activities = new ActivityDAO(this).findAll();
 
         ArrayAdapter<Meeting> adapterMeet = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, meetings);
@@ -59,6 +60,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         listMeet.setAdapter(adapterMeet);
         listAct.setAdapter(adapterAct);
+
+        listMeet.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(MainActivity.this, "ata: " + meetings.get(position).getAta(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        listAct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(MainActivity.this, "desc: " + activities.get(position).getDes(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
