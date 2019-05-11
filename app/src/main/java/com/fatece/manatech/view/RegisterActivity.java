@@ -24,10 +24,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
     EditText editFistName, editLastName, editEmail, editUsername, editPassword, editConfirmPw;
     Integer id_time;
-    RadioGroup radioGroupFunc;
-    RadioButton radioManager, radioDeveloper, radioHR, radioIntern;
     Spinner spinnerTeam;
-    Button btnRegister, btnBack;
     Integer function;
     List<Time> times;
     TimeDAO daoTime;

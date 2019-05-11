@@ -15,10 +15,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".view.MeetActivity"></activity>
+        <activity android:name=".view.MainActivity"></activity>
+        <activity android:name=".view.MeetActivity" />
         <activity android:name=".view.LoginActivity" />
         <activity android:name=".view.RegisterActivity" />
-        <activity android:name=".view.MainActivity">
+        <activity android:name=".view.SetMeetActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
