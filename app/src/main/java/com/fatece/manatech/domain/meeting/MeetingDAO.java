@@ -25,6 +25,7 @@ public class MeetingDAO {
         ContentValues values = new ContentValues();
         values.put("date", meet.getDateTime());
         values.put("ata", meet.getAta());
+        values.put("id_time", meet.getId_time());
         return db.insert(tableName, null, values);
     }
 

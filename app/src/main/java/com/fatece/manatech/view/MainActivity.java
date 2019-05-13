@@ -28,13 +28,16 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    static final int LOGIN_REQUEST = 1;
+    static final int LOGIN_REQUEST = 1, SETUP_MEET_REQUEST = 2;
     FloatingActionButton fabMenu, fabAddEmployee, fabAddMeet, fabAddAct;
     ListView listMeet, listAct;
     Float translationY = 100f;
     Boolean isMenuOpen = false;
     OvershootInterpolator interpolator = new OvershootInterpolator();
     TextView txtFirstName, txtLastName, txtFunction, txtTeam;
+    ArrayAdapter<Meeting> adapterMeet;
+    List<Meeting> meetings;
+    List<Activity> activities;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,14 +48,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent(this, LoginActivity.class);
         startActivityForResult(intent, LOGIN_REQUEST);
 
-
         listMeet = findViewById(R.id.listMeet);
         listAct = findViewById(R.id.listAct);
 
-        final List<Meeting> meetings = new MeetingDAO(this).findAll();
-        final List<Activity> activities = new ActivityDAO(this).findAll();
+        meetings = new MeetingDAO(this).findAll();
+        activities = new ActivityDAO(this).findAll();
 
-        ArrayAdapter<Meeting> adapterMeet = new ArrayAdapter<>(this,
+        adapterMeet = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, meetings);
 
         ArrayAdapter<Activity> adapterAct = new ArrayAdapter<>(this,
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listAct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MainActivity.this, "desc: " + activities.get(position).getDes(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "description: " + activities.get(position).getDes(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -135,9 +137,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.fabAddEmployee:
-                Intent i = new Intent(this, RegisterActivity.class);
-                startActivity(i);
+                Intent iReg = new Intent(this, RegisterActivity.class);
+                startActivity(iReg);
                 closeMenu();
+                break;
+            case R.id.fabAddMeet:
+                Intent iMeet = new Intent(this, SetMeetActivity.class);
+                startActivityForResult(iMeet, SETUP_MEET_REQUEST);
+                closeMenu();
+                break;
         }
     }
 
@@ -150,10 +158,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 EmployeeDAO dao = new EmployeeDAO(this);
                 Employee user = dao.findEmployee(data.getStringExtra("username"));
 
-                txtFirstName = (TextView) findViewById(R.id.txtFirtName);
-                txtLastName = (TextView) findViewById(R.id.txtLastName);
-                txtFunction = (TextView) findViewById(R.id.txtFunction);
-                txtTeam = (TextView) findViewById(R.id.txtTeam);
+                txtFirstName = findViewById(R.id.txtFirtName);
+                txtLastName = findViewById(R.id.txtLastName);
+                txtFunction = findViewById(R.id.txtFunction);
+                txtTeam = findViewById(R.id.txtTeam);
 
                 txtFirstName.setText(capitalize(user.getFirstName()));
                 txtLastName.setText(capitalize(user.getLastName()));
@@ -177,6 +185,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Time team = daoTeam.find(user.getId_time());
                 txtTeam.setText(capitalize(team.getNameTime()));
             }
+        }
+
+        if (requestCode == SETUP_MEET_REQUEST) {
+            meetings = new MeetingDAO(this).findAll();
+            adapterMeet.add(meetings.get(meetings.size() - 1));
+            adapterMeet.notifyDataSetChanged();
         }
     }
 

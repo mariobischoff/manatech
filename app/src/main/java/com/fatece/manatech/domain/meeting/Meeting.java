@@ -42,8 +42,8 @@ public class Meeting {
 
     @Override
     public String toString() {
-        String data = this.dateTime.substring(0, 11);
-        String time = this.dateTime.substring(11);
+        String data = this.dateTime.substring(0, 10);
+        String time = this.dateTime.substring(10);
         return "Date: " + data + " Time: " + time;
     }
 }

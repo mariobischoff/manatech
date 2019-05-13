@@ -4,20 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.SetMeetActivity"
+    tools:context=".view.SetActiActivity"
     android:orientation="vertical"
     android:padding="10dp">
+
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="set up a meet"
+        android:text="set up a activity"
         android:layout_marginBottom="10dp"
         android:textAlignment="center"
         style="@style/Base.TextAppearance.AppCompat.Large"/>
 
     <TextView
-        android:id="@+id/txtDateSetMeet"
+        android:id="@+id/txtDateSetActi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="--/--/-----"
@@ -27,7 +28,7 @@
         android:onClick="dateClick"/>
 
     <TextView
-        android:id="@+id/txtTimeSetMeet"
+        android:id="@+id/txtTimeSetActi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="--:--"
@@ -45,7 +46,7 @@
         style="@style/TextAppearance.AppCompat.Medium"/>
 
     <Spinner
-        android:id="@+id/spinnerTeamSetMeet"
+        android:id="@+id/spinnerTeamSetActi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
@@ -56,7 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="Ata"
+        android:text=""
         android:textAlignment="center"
         style="@style/TextAppearance.AppCompat.Medium"/>
 
@@ -96,9 +97,5 @@
             android:onClick="register"/>
 
     </LinearLayout>
-
-
-
-
 
 </LinearLayout>
