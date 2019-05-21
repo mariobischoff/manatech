@@ -15,7 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".view.SetActiActivity"></activity>
+        <activity
+            android:name=".view.SetActiActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".view.SetMeetActivity"
             android:windowSoftInputMode="adjustPan" />

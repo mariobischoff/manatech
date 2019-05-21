@@ -28,7 +28,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    static final int LOGIN_REQUEST = 1, SETUP_MEET_REQUEST = 2;
+    static final int LOGIN_REQUEST = 1, SETUP_MEET_REQUEST = 2, SETUP_ACTI_REQUEST = 3;
     FloatingActionButton fabMenu, fabAddEmployee, fabAddMeet, fabAddAct;
     ListView listMeet, listAct;
     Float translationY = 100f;
@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     OvershootInterpolator interpolator = new OvershootInterpolator();
     TextView txtFirstName, txtLastName, txtFunction, txtTeam;
     ArrayAdapter<Meeting> adapterMeet;
+    ArrayAdapter<Activity> adapterAct;
     List<Meeting> meetings;
     List<Activity> activities;
 
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         adapterMeet = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, meetings);
 
-        ArrayAdapter<Activity> adapterAct = new ArrayAdapter<>(this,
+        adapterAct = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, activities);
 
         listMeet.setAdapter(adapterMeet);
@@ -146,6 +147,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivityForResult(iMeet, SETUP_MEET_REQUEST);
                 closeMenu();
                 break;
+            case R.id.fabAddAct:
+                Intent iActi = new Intent(this, SetActiActivity.class);
+                startActivityForResult(iActi, SETUP_ACTI_REQUEST);
+                closeMenu();
+                break;
         }
     }
 
@@ -191,6 +197,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             meetings = new MeetingDAO(this).findAll();
             adapterMeet.add(meetings.get(meetings.size() - 1));
             adapterMeet.notifyDataSetChanged();
+        }
+
+        if (requestCode == SETUP_ACTI_REQUEST) {
+            activities = new ActivityDAO(this).findAll();
+            adapterAct.add(activities.get(activities.size() - 1));
+            adapterAct.notifyDataSetChanged();
         }
     }
 

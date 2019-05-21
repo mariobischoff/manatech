@@ -3,6 +3,8 @@ package com.fatece.manatech.view;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.icu.text.DecimalFormat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,8 +14,11 @@ import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.fatece.manatech.R;
+import com.fatece.manatech.domain.acitivity.Activity;
+import com.fatece.manatech.domain.acitivity.ActivityDAO;
 import com.fatece.manatech.domain.time.Time;
 import com.fatece.manatech.domain.time.TimeDAO;
 
@@ -26,7 +31,7 @@ public class SetActiActivity extends AppCompatActivity implements AdapterView.On
     Integer id_time;
     TimeDAO daoTime;
     List<Time> times;
-    TextView txtDate, txtTime;
+    TextView txtDate, txtTime, txtDesc, txtVal;
     static final int DATE_DIALOG_ID = 0;
     static final int TIME_DIALOG_ID = 1;
 
@@ -44,7 +49,13 @@ public class SetActiActivity extends AppCompatActivity implements AdapterView.On
                 R.layout.spinner_layout, R.id.txtTeam,times);
         spinnerTeamSetMeet.setAdapter(adapter);
 
+        //TextView
+        txtDate = findViewById(R.id.txtDateSetActi);
+        txtTime = findViewById(R.id.txtTimeSetActi);
+        txtDesc = findViewById(R.id.txtDescSetActi);
+        txtVal = findViewById(R.id.txtValueSetActi);
 
+        id_time = 0;
     }
 
     public void back(View view) {
@@ -52,9 +63,29 @@ public class SetActiActivity extends AppCompatActivity implements AdapterView.On
     }
 
     public void register(View view) {
+        String date = txtDate.getText().toString();
+        String time = txtTime.getText().toString();
+        Float value = Float.parseFloat(txtVal.getText().toString());
 
+        String dateTime = date + time;
+        String desc = txtDesc.getText().toString();
+        if (dateTime.length() <= 0 && desc.length() <= 0 && value.isNaN() ) {
+            Toast.makeText(this, "Please, fill all the fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Activity acti = new Activity(dateTime, value, desc, id_time, false);
+        ActivityDAO actiDAO = new ActivityDAO(this);
+        long id = actiDAO.add(acti);
+        if (id != -1) {
+            txtDate.setText("--:--:----");
+            txtTime.setText("00:00");
+            txtDesc.setText("");
+            Toast.makeText(this, "activity added", Toast.LENGTH_SHORT).show();
+            Intent returnToMain = new Intent(this, MainActivity.class);
+            setResult(RESULT_OK, returnToMain);
+            finish();
+        }
     }
-
 
     public void dateClick(View view) {
         showDialog(DATE_DIALOG_ID);
