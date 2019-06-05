@@ -2,10 +2,12 @@ package com.fatece.manatech.domain.meeting;
 
 import com.fatece.manatech.domain.time.Time;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Meeting {
+public class Meeting implements Serializable {
 
+    private Integer id;
     private String dateTime;
     private String ata;
     private Integer id_time;
@@ -18,6 +20,14 @@ public class Meeting {
 
     public String getDateTime() {
         return dateTime;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public void setDateTime(String dateTime) {

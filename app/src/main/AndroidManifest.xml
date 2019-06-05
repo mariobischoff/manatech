@@ -21,7 +21,6 @@
         <activity
             android:name=".view.SetMeetActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".view.MeetActivity" />
         <activity android:name=".view.LoginActivity" />
         <activity android:name=".view.RegisterActivity" />
         <activity android:name=".view.MainActivity">

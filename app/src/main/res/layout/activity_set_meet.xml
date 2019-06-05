@@ -92,8 +92,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:background="@drawable/button_rounded"
-            android:text="Register"
-            android:onClick="register"/>
+            android:text="Register" />
 
     </LinearLayout>
 

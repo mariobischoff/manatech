@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import com.fatece.manatech.domain.meeting.MeetingDAO;
 import com.fatece.manatech.domain.time.Time;
 import com.fatece.manatech.domain.time.TimeDAO;
 
+import java.io.Serializable;
 import java.time.MonthDay;
 import java.util.Calendar;
 import java.util.List;
@@ -32,6 +34,7 @@ public class SetMeetActivity extends AppCompatActivity implements AdapterView.On
     TimeDAO daoTime;
     List<Time> times;
     TextView txtDate, txtTime, txtAta;
+    Button btnRegister;
     static final int DATE_DIALOG_ID = 0;
     static final int TIME_DIALOG_ID = 1;
 
@@ -40,6 +43,8 @@ public class SetMeetActivity extends AppCompatActivity implements AdapterView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_meet);
+
+        Intent i = getIntent();
 
         //Spinner
         daoTime = new TimeDAO(this);
@@ -55,35 +60,82 @@ public class SetMeetActivity extends AppCompatActivity implements AdapterView.On
         txtTime = findViewById(R.id.txtTimeSetMeet);
         txtAta = findViewById(R.id.txtAtaSetMeet);
 
-        id_time = 0;
+        btnRegister = findViewById(R.id.btnRegisterSetMeet);
+
+        Boolean edit = i.getBooleanExtra("edit", false);
+        if (edit) {
+            btnRegister.setText("Edit");
+            final Meeting meet = (Meeting) i.getSerializableExtra("meet");
+            Toast.makeText(this, "meet: " + meet.getDateTime(), Toast.LENGTH_SHORT).show();
+            String date = meet.getDateTime().substring(0, 10);
+            String time = meet.getDateTime().substring(10);
+            txtDate.setText(date);
+            txtTime.setText(time);
+            txtAta.setText(meet.getAta());
+            spinnerTeamSetMeet.setSelection(meet.getId_time() - 1);
+            btnRegister.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String date = txtDate.getText().toString();
+                    String time = txtTime.getText().toString();
+                    String dateTime = date + time;
+                    String ata = txtAta.getText().toString();
+                    if (dateTime.length() <= 0 || ata.length() <= 0) {
+                        Toast.makeText(getApplicationContext(),
+                                "Please, fill all the fields", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    Meeting new_meet = new Meeting(dateTime, ata, meet.getId_time());
+                    new_meet.setId(meet.getId());
+                    MeetingDAO dao = new MeetingDAO(getApplicationContext());
+                    long id = dao.update(new_meet);
+                    if (id != -1) {
+                        txtDate.setText("--:--:----");
+                        txtTime.setText("00:00");
+                        txtAta.setText("");
+                        Toast.makeText(getApplicationContext(),
+                                "meeting altered", Toast.LENGTH_SHORT).show();
+                        Intent returnToMain = new Intent(getApplicationContext(), MainActivity.class);
+                        setResult(RESULT_OK, returnToMain);
+                        finish();
+                    }
+                }
+            });
+
+        } else {
+            btnRegister.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String date = txtDate.getText().toString();
+                    String time = txtTime.getText().toString();
+                    String dateTime = date + time;
+                    String ata = txtAta.getText().toString();
+                    if (dateTime.length() <= 0 || ata.length() <= 0) {
+                        Toast.makeText(getApplicationContext(),
+                                "Please, fill all the fields", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    Meeting meet = new Meeting(dateTime, ata, id_time);
+                    MeetingDAO daoMeet = new MeetingDAO(getApplicationContext());
+                    long id = daoMeet.add(meet);
+                    if (id != -1) {
+                        txtDate.setText("--:--:----");
+                        txtTime.setText("00:00");
+                        txtAta.setText("");
+                        Toast.makeText(getApplicationContext(),
+                                "meeting added", Toast.LENGTH_SHORT).show();
+                        Intent returnToMain = new Intent(getApplicationContext(), MainActivity.class);
+                        setResult(RESULT_OK, returnToMain);
+                        finish();
+                    }
+                }
+            });
+        }
 
     }
 
     public void back(View view) {
         finish();
-    }
-
-    public void register(View view) {
-        String date = txtDate.getText().toString();
-        String time = txtTime.getText().toString();
-        String dateTime = date + time;
-        String ata = txtAta.getText().toString();
-        if (dateTime.length() <= 0 || ata.length() <= 0) {
-            Toast.makeText(this, "Please, fill all the fields", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        Meeting meet = new Meeting(dateTime, ata, id_time);
-        MeetingDAO daoMeet = new MeetingDAO(this);
-        long id = daoMeet.add(meet);
-        if (id != -1) {
-            txtDate.setText("--:--:----");
-            txtTime.setText("00:00");
-            txtAta.setText("");
-            Toast.makeText(this, "meeting added", Toast.LENGTH_SHORT).show();
-            Intent returnToMain = new Intent(this, MainActivity.class);
-            setResult(RESULT_OK, returnToMain);
-            finish();
-        }
     }
 
     @Override

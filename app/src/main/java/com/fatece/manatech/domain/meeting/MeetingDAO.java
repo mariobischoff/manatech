@@ -20,13 +20,33 @@ public class MeetingDAO {
         db = con.getWritableDatabase();
     }
 
-
     public long add(Meeting meet) {
         ContentValues values = new ContentValues();
         values.put("date", meet.getDateTime());
         values.put("ata", meet.getAta());
         values.put("id_time", meet.getId_time());
         return db.insert(tableName, null, values);
+    }
+
+    public long update(Meeting meet) {
+        ContentValues values = new ContentValues();
+        values.put("date", meet.getDateTime());
+        values.put("ata", meet.getAta());
+        values.put("id_time", meet.getId_time());
+        return db.update(tableName, values,
+                "id = " + meet.getId().toString(),null);
+    }
+
+    public Meeting find(Integer id) {
+        String[] columuns = {"id", "date", "ata", "id_time"};
+        Cursor cursor = db.query(tableName, columuns, "id = ?",
+                new String[] {id.toString()}, null, null, null);
+        if (cursor.moveToFirst()) {
+            Meeting meet = new Meeting(cursor.getString(1),
+                    cursor.getString(2),cursor.getInt(3));
+            return meet;
+        }
+        return null;
     }
 
     public List<Meeting> findAll() {
@@ -38,6 +58,7 @@ public class MeetingDAO {
         if (cursor.moveToFirst()) {
             do {
                 Meeting meet = new Meeting(cursor.getString(1), cursor.getString(2), cursor.getInt(3));
+                meet.setId(cursor.getInt(0));
                 meetings.add(meet);
             } while (cursor.moveToNext());
             return meetings;
@@ -53,6 +74,7 @@ public class MeetingDAO {
         if (cursor.moveToFirst()) {
             do {
                 Meeting meet = new Meeting(cursor.getString(1), cursor.getString(2), cursor.getInt(3));
+                meet.setId(cursor.getInt(0));
                 meetings.add(meet);
             } while (cursor.moveToNext());
             return meetings;

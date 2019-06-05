@@ -40,7 +40,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         spinnerTeam = findViewById(R.id.spinnerTeam);
         spinnerTeam.setOnItemSelectedListener(this);
         ArrayAdapter<Time> adapter = new ArrayAdapter<Time>(this,
-                R.layout.spinner_layout, R.id.txtTeam,times);
+                R.layout.spinner_layout, R.id.txtTeam, times);
         spinnerTeam.setAdapter(adapter);
 
         editFistName = findViewById(R.id.editFirstName);

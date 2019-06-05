@@ -23,12 +23,13 @@ import com.fatece.manatech.domain.meeting.MeetingDAO;
 import com.fatece.manatech.domain.time.Time;
 import com.fatece.manatech.domain.time.TimeDAO;
 
+import java.io.Serializable;
 import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    static final int LOGIN_REQUEST = 1, SETUP_MEET_REQUEST = 2, SETUP_ACTI_REQUEST = 3;
+    static final int LOGIN_REQUEST = 1, SETUP_MEET_REQUEST = 2, SETUP_ACTI_REQUEST = 3, EDIT_MEET_REQUEST = 4;
     FloatingActionButton fabMenu, fabAddEmployee, fabAddMeet, fabAddAct;
     ListView listMeet, listAct;
     Float translationY = 100f;
@@ -64,6 +65,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listMeet.setAdapter(adapterMeet);
         listAct.setAdapter(adapterAct);
 
+        listMeet.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent iMeet = new Intent(getApplicationContext(), SetMeetActivity.class);
+                Meeting meet = meetings.get(position);
+
+                iMeet.putExtra("edit", true);
+                iMeet.putExtra("meet", meet);
+                startActivityForResult(iMeet, EDIT_MEET_REQUEST);
+                return true;
+            }
+        });
+
         listMeet.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -77,6 +91,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(MainActivity.this, "description: " + activities.get(position).getDes(), Toast.LENGTH_SHORT).show();
             }
         });
+
+
 
     }
 
@@ -144,6 +160,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.fabAddMeet:
                 Intent iMeet = new Intent(this, SetMeetActivity.class);
+                iMeet.putExtra("flag", "create");
                 startActivityForResult(iMeet, SETUP_MEET_REQUEST);
                 closeMenu();
                 break;
@@ -199,11 +216,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             adapterMeet.notifyDataSetChanged();
         }
 
+        if (requestCode == EDIT_MEET_REQUEST) {
+//            adapterMeet.clear();
+//            meetings = new MeetingDAO(this).findAll();
+//            adapterMeet.addAll(meetings);
+//            adapterMeet.notifyDataSetChanged();
+        }
+
         if (requestCode == SETUP_ACTI_REQUEST) {
             activities = new ActivityDAO(this).findAll();
             adapterAct.add(activities.get(activities.size() - 1));
             adapterAct.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapterMeet.clear();
+        meetings = new MeetingDAO(getApplicationContext()).findAll();
+        adapterMeet.addAll(meetings);
+        adapterMeet.notifyDataSetChanged();
     }
 
     private String capitalize(final String line) {
