@@ -3,24 +3,36 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="67dp">
 
     <ImageView
         android:id="@+id/imgPage"
-        android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/ic_pageview_black_24dp" />
+        android:layout_width="68dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_meet_black" />
 
-    <TextView
-        android:id="@+id/txtDateTime"
-        android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:text="12/05/1993 13:20PM"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/txtDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="12/05/1993"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/txtTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="09:20"
+            android:layout_gravity="center"/>
+
+
+    </LinearLayout>
 
 </LinearLayout>
