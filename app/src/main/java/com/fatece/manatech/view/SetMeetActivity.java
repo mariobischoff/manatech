@@ -66,7 +66,6 @@ public class SetMeetActivity extends AppCompatActivity implements AdapterView.On
         if (edit) {
             btnRegister.setText("Edit");
             final Meeting meet = (Meeting) i.getSerializableExtra("meet");
-            Toast.makeText(this, "meet: " + meet.getDateTime(), Toast.LENGTH_SHORT).show();
             String date = meet.getDateTime().substring(0, 10);
             String time = meet.getDateTime().substring(10);
             txtDate.setText(date);
@@ -76,6 +75,7 @@ public class SetMeetActivity extends AppCompatActivity implements AdapterView.On
             btnRegister.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    long selectedItemId = spinnerTeamSetMeet.getSelectedItemId() + 1;
                     String date = txtDate.getText().toString();
                     String time = txtTime.getText().toString();
                     String dateTime = date + time;
@@ -85,7 +85,7 @@ public class SetMeetActivity extends AppCompatActivity implements AdapterView.On
                                 "Please, fill all the fields", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    Meeting new_meet = new Meeting(dateTime, ata, meet.getId_time());
+                    Meeting new_meet = new Meeting(dateTime, ata, (int) selectedItemId);
                     new_meet.setId(meet.getId());
                     MeetingDAO dao = new MeetingDAO(getApplicationContext());
                     long id = dao.update(new_meet);
@@ -93,8 +93,8 @@ public class SetMeetActivity extends AppCompatActivity implements AdapterView.On
                         txtDate.setText("--:--:----");
                         txtTime.setText("00:00");
                         txtAta.setText("");
-                        Toast.makeText(getApplicationContext(),
-                                "meeting altered", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(),
+//                                "meeting altered", Toast.LENGTH_SHORT).show();
                         Intent returnToMain = new Intent(getApplicationContext(), MainActivity.class);
                         setResult(RESULT_OK, returnToMain);
                         finish();

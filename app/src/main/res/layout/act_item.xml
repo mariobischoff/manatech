@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="67dp">
+
+    <ImageView
+        android:id="@+id/imgAct"
+        android:layout_width="68dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_act_open" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/txtDeadlineLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Deadline"
+                android:layout_gravity="center"
+                style="@style/TextAppearance.AppCompat.Caption"/>
+
+            <TextView
+                android:id="@+id/txtDateAct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:text="12/05/1993"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:id="@+id/txtTimeAct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="09:20"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/txtCostLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cost: "
+            android:layout_gravity="center"
+            style="@style/TextAppearance.AppCompat.Caption"/>
+        <TextView
+            android:id="@+id/txtCost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="200.50"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+
+</LinearLayout>

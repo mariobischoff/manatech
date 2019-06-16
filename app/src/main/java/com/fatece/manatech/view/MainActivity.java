@@ -8,13 +8,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fatece.manatech.R;
 import com.fatece.manatech.domain.acitivity.Activity;
+import com.fatece.manatech.domain.acitivity.ActivityAdapter;
 import com.fatece.manatech.domain.acitivity.ActivityDAO;
 import com.fatece.manatech.domain.employee.Employee;
 import com.fatece.manatech.domain.employee.EmployeeDAO;
@@ -24,22 +23,22 @@ import com.fatece.manatech.domain.meeting.MeetingDAO;
 import com.fatece.manatech.domain.time.Time;
 import com.fatece.manatech.domain.time.TimeDAO;
 
-import java.io.Serializable;
 import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    static final int LOGIN_REQUEST = 1, SETUP_MEET_REQUEST = 2, SETUP_ACTI_REQUEST = 3, EDIT_MEET_REQUEST = 4;
+    static final int LOGIN_REQUEST = 1, SETUP_MEET_REQUEST = 2, SETUP_ACTI_REQUEST = 3,
+            EDIT_MEET_REQUEST = 4, EDIT_ACTI_REQUEST = 5;
+
     FloatingActionButton fabMenu, fabAddEmployee, fabAddMeet, fabAddAct;
     ListView listMeet, listAct;
     Float translationY = 100f;
     Boolean isMenuOpen = false;
     OvershootInterpolator interpolator = new OvershootInterpolator();
     TextView txtFirstName, txtLastName, txtFunction, txtTeam;
-//    ArrayAdapter<Meeting> adapterMeet;
     MeetAdapter adapterMeet;
-    ArrayAdapter<Activity> adapterAct;
+    ActivityAdapter adapterAct;
     List<Meeting> meetings;
     List<Activity> activities;
     Employee user;
@@ -56,46 +55,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         listMeet = findViewById(R.id.listMeet);
         listAct = findViewById(R.id.listAct);
-
-//
-//        meetings = new MeetingDAO(this).findAll();
-//        activities = new ActivityDAO(this).findAll();
-//
-//        adapterMeet = new ArrayAdapter<>(this,
-//                android.R.layout.simple_list_item_1, meetings);
-//
-//        adapterAct = new ArrayAdapter<>(this,
-//                android.R.layout.simple_list_item_1, activities);
-//
-//        listMeet.setAdapter(adapterMeet);
-//        listAct.setAdapter(adapterAct);
-//
-//        listMeet.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//                Intent iMeet = new Intent(getApplicationContext(), SetMeetActivity.class);
-//                Meeting meet = meetings.get(position);
-//
-//                iMeet.putExtra("edit", true);
-//                iMeet.putExtra("meet", meet);
-//                startActivityForResult(iMeet, EDIT_MEET_REQUEST);
-//                return true;
-//            }
-//        });
-//
-//        listMeet.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(MainActivity.this, "ata: " + meetings.get(position).getAta(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        listAct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(MainActivity.this, "description: " + activities.get(position).getDes(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
     }
 
     private void initFabMenu() {
@@ -113,6 +72,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fabAddEmployee.setOnClickListener(this);
         fabAddMeet.setOnClickListener(this);
         fabAddAct.setOnClickListener(this);
+
+        fabMenu.setEnabled(false);
+        fabMenu.hide();
+
+        fabAddEmployee.setEnabled(false);
+        fabAddMeet.setEnabled(false);
+        fabAddAct.setEnabled(false);
+
+        fabAddEmployee.hide();
+        fabAddMeet.hide();
+        fabAddAct.hide();
+
     }
 
     private void openMenu() {
@@ -128,6 +99,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fabAddAct.animate().translationY(0f).alpha(1f)
                 .setInterpolator(interpolator)
                 .setDuration(300).start();
+
+        if (user.getFunction() == 1) {
+            fabAddEmployee.setEnabled(true);
+            fabAddMeet.setEnabled(true);
+            fabAddAct.setEnabled(true);
+
+            fabAddEmployee.show();
+            fabAddMeet.show();
+            fabAddAct.show();
+        } else if (user.getFunction() == 3) {
+            fabAddEmployee.setEnabled(true);
+            fabAddEmployee.show();
+        }
     }
 
     private void closeMenu() {
@@ -143,6 +127,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fabAddAct.animate().translationY(0f).alpha(0f)
                 .setInterpolator(interpolator)
                 .setDuration(300).start();
+        fabAddEmployee.setEnabled(false);
+        fabAddMeet.setEnabled(false);
+        fabAddAct.setEnabled(false);
     }
 
     @Override
@@ -191,36 +178,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 txtFirstName.setText(capitalize(user.getFirstName()));
                 txtLastName.setText(capitalize(user.getLastName()));
 
-                switch (user.getFunction()) {
-                    case 1:
-                        txtFunction.setText("Manager");
-                        break;
-                    case 2:
-                        txtFunction.setText("Developer");
-                        break;
-                    case 3:
-                        txtFunction.setText("H.R");
-                        break;
-                    case 4:
-                        txtFunction.setText("Trainee");
-                        break;
-                }
-
                 TimeDAO daoTeam = new TimeDAO(this);
                 Time team = daoTeam.find(user.getId_time());
                 txtTeam.setText(capitalize(team.getNameTime()));
 
+                switch (user.getFunction()) {
+                    case 1:
+                        txtFunction.setText("Manager");
+                        meetings = new MeetingDAO(this).findAll();
+                        activities = new ActivityDAO(this).findAll();
+                        fabMenu.setEnabled(true);
+                        fabMenu.show();
+                        break;
+                    case 2:
+                        txtFunction.setText("Developer");
+                        meetings = new MeetingDAO(this).findByTeam(user.getId_time());
+                        activities = new ActivityDAO(this).findByTeam(user.getId_time());
+                        break;
+                    case 3:
+                        txtFunction.setText("H.R");
+                        meetings = new MeetingDAO(this).findByTeam(user.getId_time());
+                        activities = new ActivityDAO(this).findByTeam(user.getId_time());
+                        fabMenu.setEnabled(true);
+                        fabMenu.show();
+                        break;
+                    case 4:
+                        txtFunction.setText("Trainee");
+                        meetings = new MeetingDAO(this).findByTeam(user.getId_time());
+                        activities = new ActivityDAO(this).findByTeam(user.getId_time());
+                        break;
+                }
+
                 // lists
-                meetings = new MeetingDAO(this).findByTeam(user.getId_time());
-                activities = new ActivityDAO(this).findAll();
-
                 adapterMeet = new MeetAdapter(meetings, this);
-
-//                adapterMeet = new ArrayAdapter<>(this,
-//                        android.R.layout.simple_list_item_1, meetings);
-
-                adapterAct = new ArrayAdapter<>(this,
-                        android.R.layout.simple_list_item_1, activities);
+                adapterAct = new ActivityAdapter(activities, this);
 
                 listMeet.setAdapter(adapterMeet);
                 listAct.setAdapter(adapterAct);
@@ -230,7 +221,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                         Intent iMeet = new Intent(getApplicationContext(), SetMeetActivity.class);
                         Meeting meet = meetings.get(position);
-
                         iMeet.putExtra("edit", true);
                         iMeet.putExtra("meet", meet);
                         startActivityForResult(iMeet, EDIT_MEET_REQUEST);
@@ -238,17 +228,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
 
-                listMeet.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                listAct.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Toast.makeText(MainActivity.this, "ata: " + meetings.get(position).getAta(), Toast.LENGTH_SHORT).show();
+                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent iActi = new Intent(getApplicationContext(), SetActiActivity.class);
+                        Activity acti = activities.get(position);
+                        iActi.putExtra("edit", true);
+                        iActi.putExtra("acti", acti);
+                        startActivityForResult(iActi, EDIT_ACTI_REQUEST);
+                        return true;
                     }
                 });
 
                 listAct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Toast.makeText(MainActivity.this, "description: " + activities.get(position).getDes(), Toast.LENGTH_SHORT).show();
+                        ActivityDAO dao = new ActivityDAO(getApplicationContext());
+                        Activity acti = activities.get(position);
+                        Activity new_acti = new Activity(acti.getDeadline(), (float) acti.getCost(), acti.getDes(),
+                                acti.getTime(), !acti.isDone());
+                        new_acti.setId((int) id);
+                        dao.update(new_acti);
+                        adapterAct.clear();
+                        activities = new ActivityDAO(getApplicationContext()).findAll();
+                        adapterAct.addAll(activities);
+                        adapterAct.notifyDataSetChanged();
                     }
                 });
             }
@@ -261,29 +265,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             adapterMeet.notifyDataSetChanged();
         }
 
-        if (requestCode == SETUP_ACTI_REQUEST) {
+        if (requestCode == SETUP_ACTI_REQUEST || requestCode == EDIT_ACTI_REQUEST) {
+            adapterAct.clear();
             activities = new ActivityDAO(this).findAll();
-            adapterAct.add(activities.get(activities.size() - 1));
+            adapterAct.addAll(activities);
             adapterAct.notifyDataSetChanged();
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
 
-//        adapterMeet.clear();
-//        meetings = new MeetingDAO(getApplicationContext()).findAll();
-//        adapterMeet.addAll(meetings);
-//        adapterMeet.notifyDataSetChanged();
-//
-//        adapterAct.clear();
-//        activities = new ActivityDAO(this).findAll();
-//        adapterAct.addAll(activities);
-//        adapterAct.notifyDataSetChanged();
-    }
-
-    private String capitalize(final String line) {
+    private static String capitalize(final String line) {
         return Character.toUpperCase(line.charAt(0)) + line.substring(1);
     }
 }

@@ -10,7 +10,7 @@
         android:id="@+id/imgPage"
         android:layout_width="68dp"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_meet_black" />
+        android:src="@drawable/ic_meet" />
 
     <LinearLayout
         android:layout_width="match_parent"

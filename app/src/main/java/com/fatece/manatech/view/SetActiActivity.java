@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -27,11 +28,12 @@ import java.util.List;
 
 public class SetActiActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    Spinner spinnerTeamSetMeet;
+    Spinner spinnerTeamSetActi;
     Integer id_time;
     TimeDAO daoTime;
     List<Time> times;
     TextView txtDate, txtTime, txtDesc, txtVal;
+    Button btnRegister;
     static final int DATE_DIALOG_ID = 0;
     static final int TIME_DIALOG_ID = 1;
 
@@ -40,14 +42,16 @@ public class SetActiActivity extends AppCompatActivity implements AdapterView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_acti);
 
+        Intent i = getIntent();
+
         //Spinner
         daoTime = new TimeDAO(this);
         times = daoTime.findAll();
-        spinnerTeamSetMeet = findViewById(R.id.spinnerTeamSetActi);
-        spinnerTeamSetMeet.setOnItemSelectedListener(this);
+        spinnerTeamSetActi = findViewById(R.id.spinnerTeamSetActi);
+        spinnerTeamSetActi.setOnItemSelectedListener(this);
         ArrayAdapter<Time> adapter = new ArrayAdapter<Time>(this,
                 R.layout.spinner_layout, R.id.txtTeam,times);
-        spinnerTeamSetMeet.setAdapter(adapter);
+        spinnerTeamSetActi.setAdapter(adapter);
 
         //TextView
         txtDate = findViewById(R.id.txtDateSetActi);
@@ -55,7 +59,57 @@ public class SetActiActivity extends AppCompatActivity implements AdapterView.On
         txtDesc = findViewById(R.id.txtDescSetActi);
         txtVal = findViewById(R.id.txtValueSetActi);
 
+        btnRegister = findViewById(R.id.btnRegisterSetMeet);
+
         id_time = 0;
+
+        Boolean edit = i.getBooleanExtra("edit", false);
+
+        if (edit) {
+            btnRegister.setText("Edit");
+            final Activity acti = (Activity) i.getSerializableExtra("acti");
+            String dateTime = acti.getDeadline();
+            String date = dateTime.substring(0, 10);
+            String time = dateTime.substring(10);
+            txtDate.setText(date);
+            txtTime.setText(time);
+            txtDesc.setText(acti.getDes());
+            txtVal.setText(Double.toString(acti.getCost()));
+            spinnerTeamSetActi.setSelection(acti.getTime() - 1);
+
+            btnRegister.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    long selectedItemId = spinnerTeamSetActi.getSelectedItemId() + 1;
+                    String date = txtDate.getText().toString();
+                    String time = txtTime.getText().toString();
+                    String dateTime = date + time;
+                    String desc = txtDesc.getText().toString();
+                    float cost = Float.parseFloat(txtVal.getText().toString());
+                    if (dateTime.length() <= 0 || desc.length() <= 0) {
+                        Toast.makeText(getApplicationContext(),
+                                "Please, fill all the fields", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    Activity new_acti = new Activity(dateTime, cost, desc,(int) selectedItemId, false);
+                    new_acti.setId(acti.getId());
+
+                    ActivityDAO dao = new ActivityDAO(getApplicationContext());
+                    long id = dao.update(new_acti);
+                    if (id != -1) {
+                        txtDate.setText("--:--:----");
+                        txtTime.setText("00:00");
+                        txtDesc.setText("");
+                        txtVal.setText("");
+                        Intent returnToMain = new Intent(getApplicationContext(), MainActivity.class);
+                        setResult(RESULT_OK, returnToMain);
+                        finish();
+                    }
+
+                }
+            });
+
+        }
     }
 
     public void back(View view) {

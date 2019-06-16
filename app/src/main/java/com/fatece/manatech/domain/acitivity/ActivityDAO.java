@@ -31,20 +31,51 @@ public class ActivityDAO {
     }
 
     public List<Activity> findAll() {
+            List<Activity> activities = new ArrayList<>();
+            String[] columns = {"id", "deadline", "cost", "des", "id_time", "done"};
+            Cursor cursor = db.query(tableName, columns, null, null,
+                    null, null, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    boolean done = cursor.getInt(5) > 0;
+                    Activity act = new Activity(cursor.getString(1),
+                            cursor.getFloat(2), cursor.getString(3),
+                            cursor.getInt(4), done);
+                    act.setId(cursor.getInt(0));
+                    activities.add(act);
+                } while (cursor.moveToNext());
+                return activities;
+            }
+            return null;
+    }
+
+    public List<Activity> findByTeam(Integer id) {
         List<Activity> activities = new ArrayList<>();
         String[] columns = {"id", "deadline", "cost", "des", "id_time", "done"};
-        Cursor cursor = db.query(tableName, columns, null, null,
-                null, null, null);
+        Cursor cursor = db.query(tableName, columns, "id_time = ?",
+                new String[]{id.toString()}, null, null, null);
         if (cursor.moveToFirst()) {
             do {
                 boolean done = cursor.getInt(5) > 0;
                 Activity act = new Activity(cursor.getString(1),
                         cursor.getFloat(2), cursor.getString(3),
                         cursor.getInt(4), done);
+                act.setId(cursor.getInt(0));
                 activities.add(act);
             } while (cursor.moveToNext());
             return activities;
         }
         return null;
+    }
+
+    public long update(Activity acti) {
+        ContentValues values = new ContentValues();
+        values.put("deadline", acti.getDeadline());
+        values.put("cost", acti.getCost());
+        values.put("des", acti.getDes());
+        values.put("id_time", acti.getTime());
+        values.put("done", acti.isDone());
+        return db.update(tableName, values,
+                "id = " + acti.getId().toString(),null);
     }
 }

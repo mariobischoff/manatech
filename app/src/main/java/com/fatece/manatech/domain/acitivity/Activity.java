@@ -2,10 +2,12 @@ package com.fatece.manatech.domain.acitivity;
 
 import com.fatece.manatech.domain.time.Time;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Activity {
+public class Activity implements Serializable {
 
+    private Integer id;
     private String deadline;
     private double cost;
     private String des;
@@ -18,6 +20,14 @@ public class Activity {
         this.des = des;
         this.time = time;
         this.done = done;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getDeadline() {
