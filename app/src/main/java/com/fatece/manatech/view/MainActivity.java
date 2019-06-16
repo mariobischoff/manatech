@@ -17,8 +17,8 @@ import com.fatece.manatech.domain.acitivity.ActivityAdapter;
 import com.fatece.manatech.domain.acitivity.ActivityDAO;
 import com.fatece.manatech.domain.employee.Employee;
 import com.fatece.manatech.domain.employee.EmployeeDAO;
-import com.fatece.manatech.domain.meeting.MeetAdapter;
 import com.fatece.manatech.domain.meeting.Meeting;
+import com.fatece.manatech.domain.meeting.MeetAdapter;
 import com.fatece.manatech.domain.meeting.MeetingDAO;
 import com.fatece.manatech.domain.time.Time;
 import com.fatece.manatech.domain.time.TimeDAO;
@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent(this, LoginActivity.class);
         startActivityForResult(intent, LOGIN_REQUEST);
 
-
         listMeet = findViewById(R.id.listMeet);
         listAct = findViewById(R.id.listAct);
     }
@@ -83,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fabAddEmployee.hide();
         fabAddMeet.hide();
         fabAddAct.hide();
-
     }
 
     private void openMenu() {
@@ -101,11 +99,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setDuration(300).start();
 
         if (user.getFunction() == 1) {
-            fabAddEmployee.setEnabled(true);
             fabAddMeet.setEnabled(true);
             fabAddAct.setEnabled(true);
 
-            fabAddEmployee.show();
             fabAddMeet.show();
             fabAddAct.show();
         } else if (user.getFunction() == 3) {
@@ -149,7 +145,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.fabAddMeet:
                 Intent iMeet = new Intent(this, SetMeetActivity.class);
-                iMeet.putExtra("flag", "create");
                 startActivityForResult(iMeet, SETUP_MEET_REQUEST);
                 closeMenu();
                 break;
@@ -209,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         break;
                 }
 
-                // lists
+                // Lists
                 adapterMeet = new MeetAdapter(meetings, this);
                 adapterAct = new ActivityAdapter(activities, this);
 
@@ -221,7 +216,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                         Intent iMeet = new Intent(getApplicationContext(), SetMeetActivity.class);
                         Meeting meet = meetings.get(position);
-                        iMeet.putExtra("edit", true);
+                        if (user.getFunction() == 1) {
+                            iMeet.putExtra("edit", true);
+                        } else {
+                            iMeet.putExtra("view", true);
+                        }
                         iMeet.putExtra("meet", meet);
                         startActivityForResult(iMeet, EDIT_MEET_REQUEST);
                         return true;
@@ -233,46 +232,63 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                         Intent iActi = new Intent(getApplicationContext(), SetActiActivity.class);
                         Activity acti = activities.get(position);
-                        iActi.putExtra("edit", true);
+                        if (user.getFunction() == 1) {
+                            iActi.putExtra("edit", true);
+                        } else {
+                            iActi.putExtra("view", true);
+                        }
                         iActi.putExtra("acti", acti);
                         startActivityForResult(iActi, EDIT_ACTI_REQUEST);
                         return true;
                     }
                 });
 
-                listAct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        ActivityDAO dao = new ActivityDAO(getApplicationContext());
-                        Activity acti = activities.get(position);
-                        Activity new_acti = new Activity(acti.getDeadline(), (float) acti.getCost(), acti.getDes(),
-                                acti.getTime(), !acti.isDone());
-                        new_acti.setId((int) id);
-                        dao.update(new_acti);
-                        adapterAct.clear();
-                        activities = new ActivityDAO(getApplicationContext()).findAll();
-                        adapterAct.addAll(activities);
-                        adapterAct.notifyDataSetChanged();
-                    }
-                });
+                if (user.getFunction() != 3) {
+                    listAct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            ActivityDAO dao = new ActivityDAO(getApplicationContext());
+                            Activity acti = activities.get(position);
+                            Activity new_acti = new Activity(acti.getDeadline(), (float) acti.getCost(), acti.getDes(),
+                                    acti.getTime(), !acti.isDone());
+                            new_acti.setId((int) id);
+                            dao.update(new_acti);
+                            adapterAct.clear();
+                            if (user.getFunction() == 1) {
+                                activities = new ActivityDAO(getApplicationContext()).findAll();
+                            } else {
+                                activities = new ActivityDAO(getApplicationContext()).findByTeam(user.getId_time());
+                            }
+                            adapterAct.addAll(activities);
+                            adapterAct.notifyDataSetChanged();
+                        }
+                    });
+                }
             }
         }
 
         if (requestCode == EDIT_MEET_REQUEST || requestCode == SETUP_MEET_REQUEST) {
             adapterMeet.clear();
-            meetings = new MeetingDAO(this).findByTeam(user.getId_time());
+            if (user.getFunction() == 1) {
+                meetings = new MeetingDAO(getApplicationContext()).findAll();
+            } else {
+                meetings = new MeetingDAO(getApplicationContext()).findByTeam(user.getId_time());
+            }
             adapterMeet.addAll(meetings);
             adapterMeet.notifyDataSetChanged();
         }
 
-        if (requestCode == SETUP_ACTI_REQUEST || requestCode == EDIT_ACTI_REQUEST) {
+        if (requestCode == EDIT_ACTI_REQUEST || requestCode == SETUP_ACTI_REQUEST) {
             adapterAct.clear();
-            activities = new ActivityDAO(this).findAll();
+            if (user.getFunction() == 1) {
+                activities = new ActivityDAO(getApplicationContext()).findAll();
+            } else {
+                activities = new ActivityDAO(getApplicationContext()).findByTeam(user.getId_time());
+            }
             adapterAct.addAll(activities);
             adapterAct.notifyDataSetChanged();
         }
     }
-
 
     private static String capitalize(final String line) {
         return Character.toUpperCase(line.charAt(0)) + line.substring(1);

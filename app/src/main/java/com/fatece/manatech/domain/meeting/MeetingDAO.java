@@ -37,6 +37,10 @@ public class MeetingDAO {
                 "id = " + meet.getId().toString(),null);
     }
 
+    public long remove(Meeting meet) {
+        return db.delete(tableName, "id = " + meet.getId(), null);
+    }
+
     public Meeting find(Integer id) {
         String[] columuns = {"id", "date", "ata", "id_time"};
         Cursor cursor = db.query(tableName, columuns, "id = ?",

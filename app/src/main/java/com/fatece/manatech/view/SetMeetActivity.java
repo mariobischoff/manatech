@@ -34,7 +34,7 @@ public class SetMeetActivity extends AppCompatActivity implements AdapterView.On
     TimeDAO daoTime;
     List<Time> times;
     TextView txtDate, txtTime, txtAta;
-    Button btnRegister;
+    Button btnRegister, btnRemove;
     static final int DATE_DIALOG_ID = 0;
     static final int TIME_DIALOG_ID = 1;
 
@@ -61,8 +61,37 @@ public class SetMeetActivity extends AppCompatActivity implements AdapterView.On
         txtAta = findViewById(R.id.txtAtaSetMeet);
 
         btnRegister = findViewById(R.id.btnRegisterSetMeet);
+        btnRemove = findViewById(R.id.btnRemoveSetMeet);
 
+        Boolean view = i.getBooleanExtra("view", false);
         Boolean edit = i.getBooleanExtra("edit", false);
+
+        if (view) {
+            final Meeting meet = (Meeting) i.getSerializableExtra("meet");
+            String date = meet.getDateTime().substring(0, 10);
+            String time = meet.getDateTime().substring(10);
+            txtDate.setText(date);
+            txtTime.setText(time);
+            txtAta.setText(meet.getAta());
+            spinnerTeamSetMeet.setSelection(meet.getId_time() - 1);
+
+            btnRegister.setEnabled(false);
+            btnRegister.setVisibility(View.GONE);
+
+            btnRemove.setEnabled(false);
+            btnRemove.setVisibility(View.GONE);
+
+            txtDate.setFocusable(false);
+            txtDate.setKeyListener(null);
+
+            txtTime.setFocusable(false);
+            txtTime.setKeyListener(null);
+
+            spinnerTeamSetMeet.setEnabled(false);
+
+            txtAta.setFocusable(false);
+        }
+
         if (edit) {
             btnRegister.setText("Edit");
             final Meeting meet = (Meeting) i.getSerializableExtra("meet");
@@ -93,15 +122,28 @@ public class SetMeetActivity extends AppCompatActivity implements AdapterView.On
                         txtDate.setText("--:--:----");
                         txtTime.setText("00:00");
                         txtAta.setText("");
-//                        Toast.makeText(getApplicationContext(),
-//                                "meeting altered", Toast.LENGTH_SHORT).show();
                         Intent returnToMain = new Intent(getApplicationContext(), MainActivity.class);
                         setResult(RESULT_OK, returnToMain);
                         finish();
                     }
                 }
             });
-
+            btnRemove.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    MeetingDAO dao = new MeetingDAO(getApplicationContext());
+                    long id = dao.remove(meet);
+                    if (id != -1) {
+                        txtDate.setText("--:--:----");
+                        txtTime.setText("00:00");
+                        txtAta.setText("");
+                        Intent returnToMain = new Intent(getApplicationContext(), MainActivity.class);
+                        setResult(RESULT_OK, returnToMain);
+                        finish();
+                    }
+                    return true;
+                }
+            });
         } else {
             btnRegister.setOnClickListener(new View.OnClickListener() {
                 @Override

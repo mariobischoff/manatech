@@ -44,6 +44,4 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this,"Invalid username", Toast.LENGTH_LONG).show();
         }
     }
-
-
 }

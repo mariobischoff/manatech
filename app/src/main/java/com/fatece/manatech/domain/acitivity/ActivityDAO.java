@@ -30,6 +30,10 @@ public class ActivityDAO {
         return db.insert(tableName, null, values);
     }
 
+    public long remove(Activity acti) {
+        return db.delete(tableName, "id = " + acti.getId(), null);
+    }
+
     public List<Activity> findAll() {
             List<Activity> activities = new ArrayList<>();
             String[] columns = {"id", "deadline", "cost", "des", "id_time", "done"};
